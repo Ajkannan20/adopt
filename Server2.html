@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script>
+       
+        window.onload = function () {
+            
+            fetch('http://localhost:3020/failed-deployments')
+                .then(response => response.json())
+                .then(data => {
+                   
+                    var chart = new CanvasJS.Chart("chartContainer", {
+                        animationEnabled: true, 
+                        title: {
+                            text: "Top Failed Application Deployments"
+                        },
+                        axisX: {
+                            interval: 1
+                        },
+                        axisY2: {
+                            interlacedColor: "rgba(1,77,101,.2)",
+                            gridColor: "rgba(1,77,101,.1)",
+                            title: "Number of Failed Deployments"
+                        },
+                        data: [{
+                            type: "bar",
+                            name: "Deployments",
+                            color: "#014D65",
+                            axisYType: "secondary",
+                            dataPoints: data 
+                        }]
+                    });
+                    chart.render();  
+                })
+                .catch(error => console.error('Error fetching data:', error));  
+        }
+    </script>
+</head>
+<body>
+   
+    <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+
+   
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+</body>
+</html>

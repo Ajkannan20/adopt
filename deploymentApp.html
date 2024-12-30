@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html ng-app="deploymentApp">
+<head>
+  <title>Failed Deployments</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script></head>
+<body>
+
+  <div ng-controller="DeploymentController">
+    <canvas id="failedDeploymentsChart" width="400" height="200"></canvas>
+  </div>
+
+  <script>
+    angular.module('deploymentApp', [])
+      .controller('DeploymentController', function($scope, $http) {
+        // Fetch data from the API
+        $http.get('http://localhost:3000/api/failed-deployments')
+          .then(function(response) {
+            // Process the response to create a chart
+            let data = response.data;
+            let labels = data.map(item => item.project_name);
+            let failedDeployments = data.map(item => item['Number of Failed Deployments']);
+
+            // Create the chart
+            var ctx = document.getElementById('failedDeploymentsChart').getContext('2d');
+            new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: labels,
+                datasets: [{
+                  label: 'Failed Deployments',
+                  data: failedDeployments,
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+              }
+            });
+          })
+          .catch(function(error) {
+            console.error('Error fetching data:', error);
+          });
+      });
+  </script>
+
+</body>
+</html>
