@@ -1,0 +1,19 @@
+services:
+  failed_build:
+    build:
+      context: .
+      dockerfile: DockerFile
+    command: ["node", "FailedBuild.js"]
+    ports:
+      - "2090:2090"
+    environment:
+      - NODE_ENV=production
+  failed_deployment:
+    build:
+      context: .
+      dockerfile: DockerFile
+    command: ["node", "FailedDeployment.js"]
+    ports:
+      - "2031:2031"
+    environment:
+      - NODE_ENV=production

@@ -18,7 +18,8 @@ db.connect(err => {
 });
 
 const app = express();
-const port = 2090; 
+const port = 2090;
+
 app.use(cors());
 
 app.get('/failed-builds', (req, res) => {
@@ -30,7 +31,7 @@ app.get('/failed-builds', (req, res) => {
         GROUP BY project_name
         ORDER BY failed_builds DESC;
     `;
-
+    
     db.query(query, (err, results) => {
         if (err) {
             console.error('Database query error:', err);
@@ -47,5 +48,5 @@ app.get('/failed-builds', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Failed Builds server running on http://localhost:${port}`);
 });

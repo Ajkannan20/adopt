@@ -19,6 +19,7 @@ db.connect(err => {
 
 const app = express();
 const port = 2031;
+
 app.use(cors());
 
 app.get('/failed-deployments', (req, res) => {
@@ -29,7 +30,7 @@ app.get('/failed-deployments', (req, res) => {
         GROUP BY project_name
         ORDER BY COUNT(*) DESC;
     `;
-
+    
     db.query(query, (err, results) => {
         if (err) {
             console.error('Database query error:', err);
@@ -46,5 +47,5 @@ app.get('/failed-deployments', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Failed Deployments server running on http://localhost:${port}`);
 });
