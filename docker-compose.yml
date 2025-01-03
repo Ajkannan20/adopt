@@ -1,19 +1,44 @@
+version: '3.8'
+
 services:
   failed_build:
     build:
       context: .
       dockerfile: DockerFile
-    command: ["node", "FailedBuild.js"]
+    command: ["node", "FailedBuilds.js"]
     ports:
       - "2090:2090"
     environment:
       - NODE_ENV=production
+    networks:
+      - mynetwork
+
   failed_deployment:
     build:
       context: .
       dockerfile: DockerFile
-    command: ["node", "FailedDeployment.js"]
+    command: ["node", "FailedDeployments.js"]
     ports:
       - "2031:2031"
     environment:
       - NODE_ENV=production
+    networks:
+      - mynetwork
+
+  frontend:
+    build:
+      context: .
+      dockerfile: DockerFile
+    ports:
+      - "8085:80"  # Expose port 8085 for the frontend
+    volumes:
+      - .:/usr/share/nginx/html  # Mount the current directory into Nginx's root
+    depends_on:
+      - failed_build
+      - failed_deployment
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge

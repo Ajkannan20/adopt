@@ -5,16 +5,19 @@ FROM node:16
 WORKDIR /app
 
 # Copy package.json and package-lock.json if available (for dependencies)
-COPY package*.json ./
+COPY package*.json ./ 
 
-# Install dependencies
+# Install dependencies for Node.js backend
 RUN npm install
 
 # Copy the rest of the project files into the container
-COPY . .
+COPY . . 
+
+# Install Nginx for frontend
+RUN apt-get update && apt-get install -y nginx
 
 # Expose the required ports
-EXPOSE 2090 2031
+EXPOSE 2090 2031 8085
 
-# Default command to run the FailedBuild.js script
-CMD ["node", "FailedBuild.js"]
+# Default command for the backend
+CMD ["node", "FailedBuilds.js"]
